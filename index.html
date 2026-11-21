@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Latidos</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <section id="acceso">
+    <img class="logo-grande" src="logo.png" alt="Latidos. El corazón de tu organización">
+    <p class="paso">Elige cómo entrar.</p>
+    <div class="cuentas-demo">
+      <button type="button" class="cuenta-demo" data-correo="empleado@latidos.demo" data-clave="latidos">
+        <strong>Soy empleado</strong>
+        <span>Respondo y veo mi cuerpo.</span>
+      </button>
+      <button type="button" class="cuenta-demo" data-correo="rrhh@latidos.demo" data-clave="latidos">
+        <strong>Soy de RRHH</strong>
+        <span>Veo departamentos, zonas y horas extra.</span>
+      </button>
+    </div>
+    <details class="correo-opcional">
+      <summary>Entrar con correo</summary>
+      <form id="form-acceso">
+        <label>
+          <span>Correo</span>
+          <input type="email" id="correo" name="correo" autocomplete="username" required placeholder="empleado@latidos.demo">
+        </label>
+        <label>
+          <span>Clave</span>
+          <input type="password" id="clave" name="clave" autocomplete="current-password" required placeholder="latidos">
+        </label>
+        <div class="acciones">
+          <button type="submit" class="boton principal">Entrar</button>
+          <p id="aviso-acceso" class="aviso" role="status"></p>
+        </div>
+      </form>
+    </details>
+  </section>
+
+  <div class="app" id="aplicacion" hidden>
+    <header class="cabecera">
+      <img class="logo-mini" src="logo.png" alt="Latidos">
+      <nav aria-label="Secciones">
+        <button type="button" data-vista="panel">Equipo</button>
+        <button type="button" data-vista="encuesta">Encuesta</button>
+        <button type="button" data-vista="resultado">Mi cuerpo</button>
+        <button type="button" data-vista="respuestas">Respuestas</button>
+      </nav>
+      <p class="stats" id="stats-aside"></p>
+      <div class="cabecera-acciones">
+        <button type="button" class="texto solo-rrhh" id="ejemplo">Restaurar demo</button>
+        <button type="button" class="texto peligro solo-rrhh" id="borrar">Borrar</button>
+        <button type="button" class="texto" id="salir">Salir</button>
+      </div>
+    </header>
+
+    <main class="lienzo">
+      <header class="barra">
+        <div>
+          <p class="kicker" id="kicker-vista">Paso 1</p>
+          <h1 id="titulo-vista">Responde y envía</h1>
+          <p class="guia" id="guia"></p>
+        </div>
+        <label class="filtro" id="filtro-campo">
+          <span>Departamento</span>
+          <select id="filtro-departamento"></select>
+        </label>
+      </header>
+
+      <section id="vista-panel" class="vista" data-contexto="panel">
+        <p class="insight" id="insight" aria-live="polite"></p>
+        <div class="panel-grid">
+          <div class="escenario">
+            <div class="modelos" role="tablist" aria-label="Modelo del cuerpo">
+              <button type="button" data-modelo="organos">Órganos</button>
+              <button type="button" data-modelo="musculos">Músculos</button>
+              <button type="button" data-modelo="esqueleto">Esqueleto</button>
+            </div>
+            <div class="visor" id="visor-panel">
+              <canvas aria-label="Cuerpo del equipo"></canvas>
+              <p class="visor-estado">Cargando el cuerpo…</p>
+            </div>
+            <p class="caption-cuerpo" id="caption-cuerpo"></p>
+            <ul class="leyenda">
+              <li><i class="punto malo"></i> Rojo, revisar</li>
+              <li><i class="punto regular"></i> Ámbar, vigilar</li>
+              <li><i class="punto bueno"></i> Verde, bien</li>
+            </ul>
+          </div>
+          <div class="columna">
+            <div class="resumen">
+              <p class="resumen-valor" id="indice">—</p>
+              <div>
+                <p class="resumen-etiqueta">Índice de 10</p>
+                <p class="resumen-nota" id="indice-nota">Sin respuestas.</p>
+                <p class="resumen-nota" id="tendencia"></p>
+              </div>
+            </div>
+            <p class="bloqueo" id="bloqueo" hidden></p>
+            <article class="detalle" id="detalle-zona"></article>
+            <h2 class="seccion-titulo" id="titulo-afectadas">Zonas por revisar</h2>
+            <div class="afectadas" id="afectadas"></div>
+            <h2 class="seccion-titulo" id="titulo-estables">En buen estado</h2>
+            <div class="organos" id="organos"></div>
+          </div>
+        </div>
+
+        <section class="bloque" aria-labelledby="titulo-ranking">
+          <div class="bloque-cabecera">
+            <h2 id="titulo-ranking">Departamentos</h2>
+            <p>Toca uno para verlo en el cuerpo. El número es el índice. Al lado, la zona baja y las horas extra.</p>
+          </div>
+          <div class="ranking" id="ranking"></div>
+        </section>
+      </section>
+
+      <section id="vista-encuesta" class="vista" hidden>
+        <form id="formulario" class="bloque" novalidate>
+          <p class="nota-depto" id="nota-departamento" hidden></p>
+          <div class="datos-registro">
+            <label id="campo-departamento">
+              <span>Departamento</span>
+              <select id="departamento" name="departamento" required></select>
+            </label>
+            <label>
+              <span>Fecha</span>
+              <input type="date" id="fecha" name="fecha" required>
+            </label>
+          </div>
+          <div id="preguntas"></div>
+          <fieldset class="pregunta">
+            <legend>Horas extra de hoy</legend>
+            <div class="opciones">
+              <label>
+                <input type="radio" name="horasExtra" value="0" required>
+                <strong>0</strong>
+                <span>Ninguna</span>
+              </label>
+              <label>
+                <input type="radio" name="horasExtra" value="2" required>
+                <strong>2 h</strong>
+                <span>Hasta dos</span>
+              </label>
+              <label>
+                <input type="radio" name="horasExtra" value="4" required>
+                <strong>3 h+</strong>
+                <span>Tres o más</span>
+              </label>
+            </div>
+          </fieldset>
+          <div class="acciones">
+            <button type="submit" class="boton principal">Enviar y ver mi cuerpo</button>
+            <p id="aviso" class="aviso" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </section>
+
+      <section id="vista-resultado" class="vista" data-contexto="resultado" hidden>
+        <p class="insight" id="insight-personal"></p>
+        <div class="panel-grid">
+          <div class="escenario">
+            <div class="modelos" role="tablist" aria-label="Modelo de tu registro">
+              <button type="button" data-modelo="organos">Órganos</button>
+              <button type="button" data-modelo="musculos">Músculos</button>
+              <button type="button" data-modelo="esqueleto">Esqueleto</button>
+            </div>
+            <div class="visor" id="visor-personal">
+              <canvas aria-label="Tu cuerpo"></canvas>
+              <p class="visor-estado">Cargando el cuerpo…</p>
+            </div>
+            <p class="caption-cuerpo" id="caption-personal"></p>
+          </div>
+          <div class="columna">
+            <article class="detalle" id="detalle-personal"></article>
+            <div class="organos" id="organos-personal"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="vista-respuestas" class="vista" hidden>
+        <section class="bloque">
+          <div id="tabla-historial"></div>
+        </section>
+      </section>
+
+      <p class="legal">No es un diagnóstico. Un departamento se muestra desde 5 respuestas, para no señalar a una persona.</p>
+    </main>
+  </div>
+  <script src="vendor/three.min.js"></script>
+  <script src="vendor/GLTFLoader.js"></script>
+  <script src="vendor/OrbitControls.js"></script>
+  <script src="cuerpo3d.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
