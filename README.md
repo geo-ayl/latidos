@@ -1,46 +1,51 @@
 # Latidos
 
-El corazón de tu organización. Un pulso diario para que Recursos Humanos vea, por departamento, dónde se está quebrando el equipo antes de que alguien renuncie o se enferme.
+El corazón de tu organización. Monitoreo de la salud de los empleados por departamento.
+
+El empleado responde una encuesta diaria. Al enviarla, ve las zonas afectadas en un modelo del cuerpo. Recursos Humanos ve las estadísticas por departamento, las zonas afectadas y las horas extra.
 
 **Demo:** [geo-ayl.github.io/latidos](https://geo-ayl.github.io/latidos/)
 
 ![Latidos](logo.png)
 
-## Qué resuelve
+## Acceso
 
-Una encuesta de clima que termina en una hoja de cálculo esconde el problema dentro del promedio. Latidos convierte cinco respuestas y las horas extra en un cuerpo. El color dice qué zona hay que atender. El texto dice qué hacer el lunes.
+| Rol | Qué muestra |
+| --- | --- |
+| Empleado | La encuesta y su propio cuerpo |
+| RRHH | Estadísticas por departamento, zonas afectadas, horas extra y respuestas sin nombre |
 
-No es un diagnóstico médico. Es una señal para priorizar.
+| Correo | Clave |
+| --- | --- |
+| `empleado@latidos.demo` | `latidos` |
+| `rrhh@latidos.demo` | `latidos` |
 
-## Dos entradas
+También se puede entrar con los botones **Soy empleado** y **Soy de RRHH**.
 
-| Rol | Ve | No ve |
-| --- | --- | --- |
-| Empleado | La encuesta y su propio cuerpo | Otros departamentos, el ranking ni la tabla de respuestas |
-| RRHH | Departamentos, zonas afectadas, horas extra y respuestas anónimas | El nombre de quien respondió |
+## Encuesta
 
-En la demo basta con pulsar **Soy empleado** o **Soy de RRHH**.
+Cinco preguntas, de 1 a 10:
 
-| Correo | Clave | Entra como |
-| --- | --- | --- |
-| `empleado@latidos.demo` | `latidos` | Ana López, Operaciones |
-| `rrhh@latidos.demo` | `latidos` | Mariana Ruiz, RRHH |
+| Valor | Significado |
+| --- | --- |
+| 1 | Malo |
+| 5 | Regular |
+| 10 | Bueno |
 
-## Recorrido de la demo
+Las preguntas son ánimo, alimentación, lesiones, estado psicológico, y descanso y energía. Después se registran las horas extra del día: ninguna, hasta dos, o tres o más. Las horas extra no entran en el promedio de las zonas.
 
-1. Entra como RRHH. La primera frase señala el departamento más bajo.
-2. Abre **Operaciones**. Músculos queda en rojo y las horas extra son las más altas de la empresa.
-3. Cambia entre **Órganos**, **Músculos** y **Esqueleto**. Es el mismo equipo, visto en tres cuerpos.
-4. Vuelve a toda la empresa. El índice general se ve aceptable. Finanzas y Dirección están bien. El promedio esconde a Operaciones.
-5. Sal y entra como empleado. Responde, envía y mira solo tu cuerpo.
+## Zonas
 
-**Restaurar demo** devuelve el escenario si alguien cargó respuestas de prueba. **Borrar** vacía el navegador.
+Cada zona sale del promedio de las preguntas que le corresponden.
 
-## Cómo se lee
-
-Cada persona responde del 1 al 10: **1** malo, **5** regular, **10** bueno. Las preguntas cubren ánimo, alimentación, lesiones, estado psicológico y descanso. Las horas extra se registran aparte (0, hasta 2, o 3 o más) y no se mezclan con el índice del cuerpo.
-
-Una zona es el promedio de las preguntas que la alimentan. El índice del departamento es el promedio de las seis zonas.
+| Zona | Preguntas |
+| --- | --- |
+| Cerebro | Ánimo, estado psicológico, descanso |
+| Corazón | Ánimo, descanso |
+| Estómago | Alimentación |
+| Hígado | Alimentación, descanso |
+| Músculos y articulaciones | Lesiones, descanso |
+| Sistema inmune | Alimentación, lesiones, descanso, ánimo |
 
 | Puntaje | Estado | Color |
 | --- | --- | --- |
@@ -48,34 +53,32 @@ Una zona es el promedio de las preguntas que la alimentan. El índice del depart
 | De 4 a menos de 8 | En observación | Ámbar |
 | 8 o más | Estable | Verde |
 
-Un departamento no se muestra hasta juntar **5 respuestas anónimas**. Así un equipo pequeño no queda expuesto. El consolidado de la empresa tampoco incluye departamentos por debajo de ese umbral.
+El índice del departamento es el promedio de las seis zonas. El cuerpo se puede ver en órganos, músculos o esqueleto.
+
+Un departamento se muestra a partir de 5 respuestas. Por debajo de ese número los datos quedan ocultos para no señalar a una persona. Las respuestas no guardan nombre.
 
 ## Ejecutar en local
 
-Los modelos 3D no cargan si se abre `index.html` como archivo. Hay que servirlo por HTTP.
+Los modelos no cargan al abrir `index.html` directo. Hay que usar un servidor.
 
-En Windows, doble clic en `iniciar.bat`. Abre [http://127.0.0.1:8765/](http://127.0.0.1:8765/).
-
-Con Node en el PATH:
+En Windows, doble clic en `iniciar.bat`. Queda en [http://127.0.0.1:8765/](http://127.0.0.1:8765/).
 
 ```bash
 node servidor.js 8765
 ```
 
-La primera visita siembra el escenario de demostración en el navegador. Los datos quedan en `localStorage` de ese origen. Cerrar sesión no los borra.
+La primera visita carga un escenario de demostración en el navegador. **Restaurar demo** lo vuelve a poner. **Borrar** elimina las respuestas guardadas en ese navegador.
 
 ## Estructura
 
 ```
-index.html      interfaz
-estilos.css     estilo
-app.js          encuesta, roles, índices y escenario
-cuerpo3d.js     visor Three.js de los tres modelos
-servidor.js     servidor estático local
-src/            cuerpos en glTF (.glb)
-vendor/         Three.js r147
+index.html      páginas
+estilos.css     estilos
+app.js          encuesta, roles y cálculos
+cuerpo3d.js     modelos 3D
+servidor.js     servidor local
+src/            archivos .glb
+vendor/         Three.js
 ```
 
-## Aviso
-
-Latidos ordena señales de un reporte propio. No sustituye una valoración clínica ni una decisión laboral sobre una persona.
+Latidos no es un diagnóstico.
